@@ -1,0 +1,81 @@
+from flask import Flask, request, jsonify
+import json
+
+app = Flask(__name__)
+
+# Read data from the JSON files
+with open("phone_data.json", "r") as phone_number_file:
+    phone_number_data = json.load(phone_number_file)
+
+with open("email_data.json", "r") as email_file:
+    email_data = json.load(email_file)
+
+with open("eid_data.json", "r") as eid_file:
+    eid_data = json.load(eid_file)
+
+# Function to find Suntory ID based on email id
+def find_suntory_id_by_email(email):
+    for entry in email_data:
+        if "Emails" in entry and email in entry["Emails"]:
+            return entry.get("ID")
+    return None
+
+# Function to check if an email id exists
+def check_email_exists(email_id):
+    suntory_id = find_suntory_id_by_email(email_id)
+    return suntory_id is not None, suntory_id
+
+# Function to find Suntory ID based on phone number
+def find_suntory_id_by_phone_number(phone_number):
+    for entry in phone_number_data:
+        if "PhoneNumber" in entry and phone_number in entry["PhoneNumber"]:
+            return entry.get("ID")
+    return None
+
+# Function to check if a phone number exists
+def check_phone_number_exists(phone_number):
+    suntory_id = find_suntory_id_by_phone_number(phone_number)
+    return suntory_id is not None, suntory_id
+
+# Function to find Suntory ID based on eid
+def find_suntory_id_by_eid(eid):
+    for entry in eid_data:
+        if "Eid" in entry and eid in entry["Eid"]:
+            return entry.get("ID")
+    return None
+
+# Function to check if an eid exists
+def check_eid_exists(eid):
+    suntory_id = find_suntory_id_by_eid(eid)
+    return suntory_id is not None, suntory_id
+
+# Endpoint to check if an email id, phone number, and eid exist
+@app.route('/check_identifiers', methods=['POST'])
+def check_identifiers():
+    req_data = request.get_json()
+
+    phone_number = req_data.get("phone_number", "")
+    email_id = req_data.get("email_id", "")
+    eid = req_data.get("eid", "")
+
+    response = {}
+
+    # Check email id
+    email_exists, email_suntory_id = check_email_exists(email_id)
+    response["Emailidexist"] = "Yes" if email_exists else "No"
+    response["EmailSuntory id"] = email_suntory_id or ""
+
+    # Check phone number
+    phone_number_exists, phone_number_suntory_id = check_phone_number_exists(phone_number)
+    response["Phonenumberexist"] = "Yes" if phone_number_exists else "No"
+    response["PNSuntory id"] = phone_number_suntory_id or ""
+
+    # Check eid
+    eid_exists, eid_suntory_id = check_eid_exists(eid)
+    response["Exeternalidexist"] = "Yes" if eid_exists else "No"
+    response["ExternalSuntory id"] = eid_suntory_id or ""
+
+    return jsonify(response)
+
+if __name__ == '__main__':
+    app.run(debug=True)
