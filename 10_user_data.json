@@ -1,0 +1,74 @@
+[
+
+    {
+      "suntory_id": "12345",
+      "username": "JohnDoe123",
+      "e_id": "E001",
+      "email_id": "john.doe@example.com",
+      "phone_number": "+91 98765432101"
+    },
+    {
+      "suntory_id": "67890",
+      "username": "AliceSmith456",
+      "e_id": "E002",
+      "email_id": "alice.smith@example.com",
+      "phone_number": "+91 87654321092"
+    },
+    {
+      "suntory_id": "23456",
+      "username": "BobJohnson789",
+      "e_id": "E003",
+      "email_id": "bob.johnson@example.com",
+      "phone_number": "+91 76543210983"
+    },
+    {
+      "suntory_id": "78901",
+      "username": "EvaMiller101",
+      "e_id": "E004",
+      "email_id": "eva.miller@example.com",
+      "phone_number": "+91 65432109874"
+    },
+    {
+      "suntory_id": "34567",
+      "username": "DanielBrown234",
+      "e_id": "E005",
+      "email_id": "daniel.brown@example.com",
+      "phone_number": "+91 54321098765"
+    },
+    {
+      "suntory_id": "89012",
+      "username": "SophiaWhite567",
+      "e_id": "E006",
+      "email_id": "sophia.white@example.com",
+      "phone_number": "+91 43210987656"
+    },
+    {
+      "suntory_id": "45678",
+      "username": "LiamDavis890",
+      "e_id": "E007",
+      "email_id": "liam.davis@example.com",
+      "phone_number": "+91 32109876547"
+    },
+    {
+      "suntory_id": "90123",
+      "username": "OliviaWilson012",
+      "e_id": "E008",
+      "email_id": "olivia.wilson@example.com",
+      "phone_number": "+91 21098765438"
+    },
+    {
+      "suntory_id": "56789",
+      "username": "MiaJones345",
+      "e_id": "E009",
+      "email_id": "mia.jones@example.com",
+      "phone_number": "+91 10987654329"
+    },
+    {
+      "suntory_id": "23456",
+      "username": "NoahTaylor678",
+      "e_id": "E010",
+      "email_id": "noah.taylor@example.com",
+      "phone_number": "+91 98765432107"
+    }
+  
+]
