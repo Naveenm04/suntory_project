@@ -1,0 +1,69 @@
+import json
+from flask import Flask, jsonify,request
+from pymongo import MongoClient
+from bson import ObjectId
+
+
+app = Flask(__name__)
+
+# Connect to MongoDB
+# client = MongoClient("mongodb://localhost:27017/")
+# db = client["suntory_db"]  # Replace "your_database_name" with your actual database name
+# collection = db["users_data"]  # Replace "your_collection_name" with your actual collection name
+
+def check_existence(data):
+    try:
+        # Connect to MongoDB
+        client = MongoClient('mongodb://localhost:27017/')
+        db = client['suntory_db']
+        collection = db['users_data']
+
+        # Check if each identifier exists in the collection
+        results = {}
+        for key in data:
+            value = data[key]
+            user = collection.find_one({key: value})
+            if value and user:
+                results[f"{key}_exist"] = "Yes"
+                results[f"{key}_suntory_id"] = str(user.get("suntory_id", ""))
+
+            else:
+                results[f"{key}_exist"] = "No"
+                results[f"{key}_suntory_id"] = ""
+
+            # If phone_number and e_id have the same suntory_id and email_id_suntory is blank, update email_id_suntory
+        if results.get("phone_number_exist") == "Yes" and results.get("e_id_exist") == "Yes":
+            query = {
+                        "phone_number": data.get("phone_number"),
+                        "e_id": data.get("e_id"),
+                        "email_id_suntory": ""
+            }
+
+            user_to_update = collection.find_one(query)
+
+            if user_to_update:
+                        # Update the email_id_suntory in the record
+                update_result = collection.update_one(
+                            {"_id": user_to_update["_id"]},
+                            {"$set": {"email_id_suntory": data.get("email_id")}}
+                )
+
+                if update_result.modified_count > 0:
+                    results["email_id_update"] = "Yes"
+                else:
+                    results["email_id_update"] = "No"
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+@app.route('/check_existence', methods=['POST'])
+def check_existence_endpoint():
+    data = request.get_json()
+
+    if not any(data.values()):
+        return jsonify({"error": "At least one identifier (email_id, phone_number, e_id) is required"}), 400
+
+    return check_existence(data)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
